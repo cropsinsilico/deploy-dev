@@ -29,7 +29,6 @@ services:
     deploy:
       replicas: 1
 
-
   girder:
     image: wholetale/girder:latest
     networks:
@@ -40,6 +39,7 @@ services:
       - ./volumes:/tmp/data
       - ./girder/girder.local.cfg:/girder/girder/conf/girder.local.cfg
       - ./src/wholetale:/girder/plugins/wholetale
+      - ./src/cis:/girder/plugins/cis
       - ./src/wt_data_manager:/girder/plugins/wt_data_manager
       - ./src/wt_home_dir:/girder/plugins/wt_home_dir
       - ./src/wt_versioning:/girder/plugins/wt_versioning
@@ -136,6 +136,22 @@ services:
         - "traefik.docker.network=wt_traefik-net"
         - "traefik.frontend.passHostHeader=true"
         - "traefik.frontend.entryPoints=https"
+  
+  ui:
+    image: xarthisius/cis-ui
+    networks:
+      - traefik-net
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.frontend.rule=Host:ui.local.wholetale.org"
+        - "traefik.port=80"
+        - "traefik.enable=true"
+        - "traefik.docker.network=wt_traefik-net"
+        - "traefik.frontend.passHostHeader=true"
+    environment:
+      - DOMAIN=local.wholetale.org
+      - GIRDER_URL=https://girder.local.wholetale.org
 
 #  celery_worker:
 #    image: wholetale/gwvolman

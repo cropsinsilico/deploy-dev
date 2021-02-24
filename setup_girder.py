@@ -67,6 +67,7 @@ plugins = [
     "wholetale",
     "wt_home_dir",
     "wt_versioning",
+    "cis",
 ]
 r = requests.put(
     api_url + "/system/plugins",
@@ -96,7 +97,7 @@ print("Setting up Plugin")
 settings = [
     {
         "key": "core.cors.allow_origin",
-        "value": "https://dashboard.local.wholetale.org,http://localhost:4200,https://legacy.local.wholetale.org",
+        "value": "https://dashboard.local.wholetale.org,https://ui.local.wholetale.org",
     },
     {
         "key": "core.cors.allow_headers",
@@ -203,7 +204,7 @@ r = requests.post(api_url + "/image", headers=headers, params=i_params)
 r.raise_for_status()
 image = r.json()
 
-print("Create a JupyterLab image")
+print("Create a Jupyter Lab image")
 i_params = {
     "config": json.dumps(
         {
@@ -226,7 +227,7 @@ i_params = {
         "squarelogo-greytext-orangebody-greymoons.png"
     ),
     "iframe": True,
-    "name": "JupyterLab",
+    "name": "Jupyter Lab",
     "public": True,
 }
 r = requests.post(api_url + "/image", headers=headers, params=i_params)
